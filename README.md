@@ -134,3 +134,4 @@ following conditions).
    is what `paper-main.tex` at the repo root starts from).
 2. `template/` keeps a pristine, untouched copy of the template for
    reference — it isn't part of the build.
+# latex-vscode-template
