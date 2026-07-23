@@ -150,9 +150,12 @@ by committing the new submodule SHA).
 
 ## Git
 
-Ask before pushing — don't push or open PRs unless asked. A short-lived
-`feat/<name>` branch → PR → squash is a reasonable default; small edits may
-go straight to `main` if the author prefers.
+**Never `git commit` or `git push` (or open a PR) unless explicitly asked
+to in that turn.** Editing files is fine; leave the working tree uncommitted
+otherwise so the author can review a diff before it becomes history. A
+short-lived `feat/<name>` branch → PR → squash is a reasonable default when
+committing is asked for; small edits may go straight to `main` if the
+author prefers.
 
 ## Bootstrapping a new paper from this template
 
