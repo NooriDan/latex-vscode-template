@@ -90,7 +90,8 @@ manager's own key (e.g. `authorTitleWordYear`).
 | `template/` | the pristine arxiv/PRIME template (`templatePRIME.tex` + `.sty`) — reference only, not part of the build |
 | `scripts/` | `gen-draft.sh` (compile + archive a snapshot), `clean-build.sh` (purge build artifacts) |
 | `.vscode/settings.json` | LaTeX Workshop config: builds to `build/`, ChkTeX lint, `.bib` format-on-save |
-| `.claude/skills/` | writing/figure skills available to Claude Code in this repo (see below) |
+| `academic-writing-skill/` | git submodule pinning [NooriDan/academic-writing-skill](https://github.com/NooriDan/academic-writing-skill) — the actual skill sources live here |
+| `.claude/skills/` | **symlink** to `academic-writing-skill/skills` (see below) — empty/broken until `git submodule update --init` has run |
 
 ## Building
 
@@ -132,14 +133,20 @@ its keep, don't pre-create it empty.
 
 ## Skills available in this repo
 
+`.claude/skills/` is a symlink into the `academic-writing-skill/` submodule
+(see *Layout*) — the skills aren't vendored here, so don't edit them in
+place; edit them in the `academic-writing-skill` repo and let the submodule
+pin pick up the change (`make submodules` to pull latest, or bump the pin
+by committing the new submodule SHA).
+
 - **academic-writing-style** — active voice, punctuation, concision,
   paragraph structure; use when polishing prose.
 - **research-paper-writing** — section-level structure and reviewer-facing
   presentation (Abstract/Intro/Related Work/Method/Experiments/Conclusion).
 - **circuitikz-gen-transistor-schematic** — generates/fixes CircuiTikZ
   transistor-level schematics from xschem netlists. **Only relevant to
-  analog-circuit papers** — delete this skill directory if the paper isn't
-  about circuits.
+  analog-circuit papers** — harmless to leave for other papers since it
+  self-scopes off its own description; it just won't fire.
 
 ## Git
 
@@ -153,8 +160,8 @@ When starting a new paper from this template, at minimum:
 
 1. Fill in the placeholders at the top of this file (repo name, title,
    authors, institution) and in `paper-main.tex` (`\title`, `\author`).
-2. Delete the `circuitikz-gen-transistor-schematic` skill under
-   `.claude/skills/` unless the paper is about analog circuits.
+2. Once per clone: `git submodule update --init` to populate
+   `academic-writing-skill/` (and make `.claude/skills/` resolve).
 3. Update `LICENSE` (copyright holder/year) and `README.md` (project name,
    description) for the new paper.
 4. Set `TITLE` in `scripts/gen-draft.sh` to the new paper's slug.

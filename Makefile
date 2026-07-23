@@ -1,12 +1,13 @@
-.PHONY: help check check-all draft clean clean-all
+.PHONY: help check check-all draft clean clean-all submodules
 
 MAIN    := paper-main
 BUILDIR := .build
 
 # Every .tex source meant to compile on its own: paper-main.tex plus any standalone
-# figures under media/ (excludes template/ and .claude/ reference-only sources,
-# and any build/.build*/pdf scratch dirs).
-TEXFILES := $(shell find . \( -path './template' -o -path './.claude' -o -path './.git' \) -prune -o \
+# figures under media/ (excludes template/, .claude/ (symlinked into the skills
+# submodule), the academic-writing-skill/ submodule itself, and any build/.build*/pdf
+# scratch dirs).
+TEXFILES := $(shell find . \( -path './template' -o -path './.claude' -o -path './academic-writing-skill' -o -path './.git' \) -prune -o \
               -name '*.tex' -not -path '*/build/*' -not -path './.build*/*' -not -path './pdf/*' -print \
               | sed 's|^\./||' | sort)
 
@@ -19,6 +20,7 @@ help:
 	@echo "                             optional: TITLE=<title> DRAFT_ID=<id>"
 	@echo "  make clean                 remove build artifacts (./scripts/clean-build.sh)"
 	@echo "  make clean-all DIR=<dir>   remove build artifacts under one directory, recursively"
+	@echo "  make submodules            init/update the academic-writing-skill skills submodule"
 
 # Shared loop body for check/check-all: $(1) is the list of .tex files to compile.
 # paper-main.tex builds into $(BUILDIR)/; every other .tex (a standalone figure) builds
@@ -66,3 +68,6 @@ clean:
 clean-all:
 	@if [ -z "$(DIR)" ]; then echo "error: DIR is required, e.g. make clean-all DIR=pdf/some-draft" >&2; exit 2; fi
 	./scripts/clean-build.sh $(DIR)
+
+submodules:
+	git submodule update --init --remote

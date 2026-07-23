@@ -5,21 +5,25 @@ Workshop and Claude Code. Click **"Use this template"** on GitHub to start a
 new paper repo from this one.
 
 Based on the PRIME AI / arxiv-style template (`template/`), with a
-compile/draft/clean workflow, a pre-commit compile check, CI, and a set of
-Claude Code skills for academic writing and figure generation.
+compile/draft/clean workflow, a pre-commit compile check, CI, and Claude
+Code skills for academic writing and figure generation — pulled in live via
+a git submodule (`academic-writing-skill/`) rather than vendored copies, so
+run `git submodule update --init` after cloning.
 
 ## Getting started with a new paper
 
 1. Create your paper repo from this template (GitHub: "Use this template").
-2. Edit `paper-main.tex`: set `\title`, `\author`, and start writing.
-3. Fill in the placeholders in `CLAUDE.md` and work through its
+2. Clone it, then init the skills submodule:
+   ```bash
+   git submodule update --init
+   ```
+3. Edit `paper-main.tex`: set `\title`, `\author`, and start writing.
+4. Fill in the placeholders in `CLAUDE.md` and work through its
    "Bootstrapping a new paper from this template" checklist.
-4. Enable the pre-commit hook (once per clone):
+5. Enable the pre-commit hook (once per clone):
    ```bash
    git config core.hooksPath .githooks
    ```
-5. If the paper isn't about analog circuits, delete
-   `.claude/skills/circuitikz-gen-transistor-schematic/` — it's domain-specific.
 
 ## Draft workflow
 
@@ -81,14 +85,31 @@ container and uploads the resulting PDF as a build artifact on success.
 
 ## Claude Code integration
 
-`.claude/skills/` ships three skills usable while writing:
+`.claude/skills/` is a **symlink** into the `academic-writing-skill/` git
+submodule (pinned to
+[NooriDan/academic-writing-skill](https://github.com/NooriDan/academic-writing-skill)),
+not a flat copy — so every paper repo made from this template shares one
+source of truth for its skills and can pull in improvements later. It's
+empty until you run `git submodule update --init` (see "Getting started").
+
+Currently ships:
 
 - **academic-writing-style** — sentence/paragraph-level prose revision.
 - **research-paper-writing** — section-level structure and reviewer-facing
   presentation.
 - **circuitikz-gen-transistor-schematic** — CircuiTikZ transistor schematics
-  from xschem netlists; only relevant to analog-circuit papers, delete
-  otherwise.
+  from xschem netlists; only relevant to analog-circuit papers. It self-scopes
+  via its own description, so it's harmless to leave in for other papers.
+
+To pull the latest skills from upstream:
+
+```bash
+make submodules          # git submodule update --init --remote
+```
+
+Plain `git submodule update --init` (no `--remote`) checks out whatever
+commit is currently pinned in this repo instead of the latest upstream —
+use that if you want a reproducible, pinned skill set rather than always-latest.
 
 `CLAUDE.md` carries the project guidance (hard rules on not inventing
 content/citations, the reference-finding workflow, build instructions) —
@@ -134,4 +155,3 @@ following conditions).
    is what `paper-main.tex` at the repo root starts from).
 2. `template/` keeps a pristine, untouched copy of the template for
    reference — it isn't part of the build.
-# latex-vscode-template

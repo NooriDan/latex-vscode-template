@@ -1,0 +1,3 @@
+[submodule "academic-writing-skill"]
+	path = academic-writing-skill
+	url = https://github.com/NooriDan/academic-writing-skill.git
