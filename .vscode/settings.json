@@ -1,0 +1,54 @@
+{
+  // Build artifacts go to build/ (keeps the source folder clean)
+  "latex-workshop.latex.outDir": "%DIR%/build",
+
+  // Don't auto-compile (global files.autoSave=afterDelay would otherwise
+  // trigger a build on every pause/click). Build on demand: Ctrl+Alt+B.
+  "latex-workshop.latex.autoBuild.run": "never",
+
+  // ── BibTeX formatting (Format Document on a .bib) ──
+  "latex-workshop.bibtex-format.tab": "tab",
+  "latex-workshop.bibtex-format.case.type": "lowercase",
+  "latex-workshop.bibtex-format.case.field": "lowercase",
+  "latex-workshop.bibtex-format.surround": "Curly braces",
+  "latex-workshop.bibtex-format.trailingComma": true,
+  "latex-workshop.bibtex-format.align-equal.enabled": true,
+  "latex-workshop.bibtex-format.sort.enabled": true,
+  "latex-workshop.bibtex-format.sortby": ["key"],
+  "latex-workshop.bibtex-fields.sort.enabled": true,
+  "latex-workshop.bibtex-fields.order": [
+    "title", "author", "year", "journal", "booktitle",
+    "volume", "number", "pages", "doi", "url"
+  ],
+
+  // Format-on-save scoped to .bib only (won't reflow your .tex)
+  "[bibtex]": { "editor.formatOnSave": true, "editor.tabSize": 2, "editor.wordWrap": "on" },
+
+  // ── Indentation: standardize LaTeX on 2 spaces (don't auto-detect) ──
+  "[latex]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.detectIndentation": false,
+    "editor.wordWrap": "on"
+  },
+
+  // ── Linting (ChkTeX — the actual LaTeX linter) ──
+  "latex-workshop.linting.chktex.enabled": true,
+  "latex-workshop.linting.run": "onType",
+  "latex-workshop.linting.delay": 500,
+  // Extend the ChkTeX defaults; -n24 silences "space before \label" — we keep each
+  // \label on its own line after \section, which is a deliberate style choice here.
+  "latex-workshop.linting.chktex.exec.args": ["-wall", "-n22", "-n30", "-e16", "-q"],
+
+  // ── SyncTeX: after each build, scroll the PDF viewer to the cursor ──
+  // (On demand: Ctrl+Alt+J jumps PDF→cursor; Ctrl+click in the PDF jumps back.)
+  "latex-workshop.synctex.afterBuild.enabled": true,
+
+  // ── Citation UX ──
+  "latex-workshop.intellisense.citation.label": "title",
+  "latex-workshop.hover.citation.enabled": true,
+  "latex-workshop.hover.preview.enabled": true,
+
+  // ── Keep the folder tidy after each build (never touches .pdf) ──
+  "latex-workshop.latex.autoClean.run": "onBuilt"
+}

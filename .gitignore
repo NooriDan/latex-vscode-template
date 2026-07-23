@@ -1,0 +1,100 @@
+# LaTeX intermediate / build artifacts
+# (Based on the GitHub TeX.gitignore. PDFs are intentionally NOT ignored so
+#  figures and the compiled output under pdf/ stay tracked.)
+
+## Core latex/pdflatex auxiliary files
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+.*.lb
+
+## Intermediate documents
+*.dvi
+*.xdv
+*-converted-to.*
+
+## Bibliography auxiliary files (bibtex/biblatex/biber)
+*.bbl
+*.bbl-SAVE-ERROR
+*.bcf
+*.blg
+*-blx.aux
+*-blx.bib
+*.run.xml
+
+## LaTeX Workshop (VSCode) live-build output dir — see .vscode/settings.json
+build/
+
+## pre-commit hook's own scratch build dir — see .githooks/pre-commit
+.precommit-build/
+
+## agent/CLI compile-check output dir(s) — see CLAUDE.md ("Building")
+## (.build/ for the main paper; .build-<figid>/ for standalone per-figure checks)
+.build*/
+
+## Build tool auxiliary files
+*.fdb_latexmk
+*.synctex
+*.synctex(busy)
+*.synctex.gz
+*.synctex.gz(busy)
+*.pdfsync
+latex.out/
+
+## Beamer
+*.nav
+*.pre
+*.snm
+*.vrb
+
+## Index / glossary / nomenclature
+*.idx
+*.ilg
+*.ind
+*.glg
+*.glo
+*.gls
+*.glsdefs
+*.acn
+*.acr
+*.alg
+*.lol
+*.nlg
+*.nlo
+*.nls
+*.brf
+
+## Hyperref / xr / todonotes / etc.
+*.xdy
+*.tdo
+
+## TikZ externalization
+*.figlist
+*.makefile
+*.auxlock
+*.dpth
+*.md5
+
+## minted / pygments
+_minted*/
+*.pyg
+*.pytxcode
+pythontex-files-*/
+
+## Editor / OS cruft
+*.bak
+*.sav
+*~
+.DS_Store
+
+## Uncomment to also ignore the compiled paper (if you prefer not to track it):
+# paper-main.pdf
+# pdf/*.pdf

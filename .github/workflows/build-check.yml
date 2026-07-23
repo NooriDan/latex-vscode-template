@@ -1,0 +1,37 @@
+name: Build check
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'paper-main.tex'
+      - 'references.bib'
+      - '*.sty'
+      - 'media/**'
+      - '.github/workflows/build-check.yml'
+  pull_request:
+    paths:
+      - 'paper-main.tex'
+      - 'references.bib'
+      - '*.sty'
+      - 'media/**'
+      - '.github/workflows/build-check.yml'
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compile paper-main.tex
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: paper-main.tex
+          args: -pdf -interaction=nonstopmode -halt-on-error
+
+      - name: Upload compiled PDF
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: paper-main-pdf
+          path: paper-main.pdf

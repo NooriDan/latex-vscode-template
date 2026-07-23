@@ -1,0 +1,16 @@
+# ChkTeX resource file for this paper.
+#
+# LaTeX Workshop auto-loads this file (it appends `-l <this-dir>/.chktexrc` when
+# linting the root file), and command-line `chktex` reads it from the project
+# root too -- so the suppression below applies no matter which folder is opened
+# as the VS Code workspace root.
+#
+# We keep every \label on its own line, immediately after its \section /
+# \subsection / \caption -- a deliberate, consistent style in this draft. ChkTeX
+# reads that line break as a "space before \label" and raises Warning 24
+# ("Delete this space to maintain correct page references") on every section.
+# It is a false positive for this style, so disable it globally for the paper.
+CmdLine
+{
+    -n24
+}

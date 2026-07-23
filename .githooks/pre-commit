@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+# pre-commit — block commits that leave paper-main.tex unable to compile.
+#
+# Only runs latexmk when a staged file could affect the compile (the .tex
+# itself, references.bib, .sty files, or anything under media/). Compiles
+# into .precommit-build/ (git-ignored) so it never touches the live build/
+# directory LaTeX Workshop uses in the editor.
+#
+# This checks for hard compile errors (bad syntax, undefined entry types,
+# unencodable characters, etc.) — NOT for undefined citations/references or
+# missing BibTeX fields, which are expected in a work-in-progress draft and
+# only ever produce warnings, never a nonzero latexmk exit code.
+set -euo pipefail
+
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT"
+
+MAIN="paper-main"
+
+staged="$(git diff --cached --name-only --diff-filter=ACM)"
+
+relevant=false
+while IFS= read -r f; do
+  case "$f" in
+    paper-main.tex|references.bib|*.sty|media/*)
+      relevant=true
+      break
+      ;;
+  esac
+done <<< "$staged"
+
+if [[ "$relevant" != true ]]; then
+  exit 0
+fi
+
+if ! command -v latexmk >/dev/null 2>&1; then
+  echo "pre-commit: latexmk not found on PATH, skipping compile check" >&2
+  exit 0
+fi
+
+scratch="$ROOT/.precommit-build"
+rm -rf "$scratch"
+mkdir -p "$scratch"
+
+echo "pre-commit: compiling $MAIN.tex to verify it still builds..."
+if ! latexmk -pdf -interaction=nonstopmode -halt-on-error -output-directory="$scratch" "$MAIN.tex" \
+      > "$scratch/pre-commit-build.log" 2>&1; then
+  echo "pre-commit: $MAIN.tex failed to compile — commit blocked." >&2
+  echo "----- tail of build log -----" >&2
+  tail -n 60 "$scratch/pre-commit-build.log" >&2
+  echo "------------------------------" >&2
+  echo "Full log kept at $scratch/pre-commit-build.log for inspection." >&2
+  echo "Reproduce with: latexmk -pdf -interaction=nonstopmode -halt-on-error -output-directory=$scratch $MAIN.tex" >&2
+  exit 1
+fi
+
+rm -rf "$scratch"
+echo "pre-commit: $MAIN.tex compiles cleanly."
