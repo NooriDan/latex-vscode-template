@@ -4,10 +4,11 @@ A starter repo for writing an academic paper in LaTeX with VS Code + LaTeX
 Workshop and Claude Code. Click **"Use this template"** on GitHub to start a
 new paper repo from this one.
 
-Based on the PRIME AI / arxiv-style template (`template/`), with a
-compile/draft/clean workflow, a pre-commit compile check, CI, and Claude
-Code skills for academic writing and figure generation — pulled in live via
-a git submodule (`academic-writing-skill/`) rather than vendored copies, so
+`paper-main.tex` ships in the PRIME AI / arxiv style; `template/` also carries
+an IEEEtran skeleton for IEEE venues (see "Switching to IEEEtran"). Around
+that: a compile/draft/clean workflow, a pre-commit compile check, CI, and
+Claude Code skills for academic writing and figure generation — pulled in live
+via a git submodule (`academic-writing-skill/`) rather than vendored copies, so
 run `git submodule update --init` after cloning.
 
 ## Getting started with a new paper
@@ -24,6 +25,33 @@ run `git submodule update --init` after cloning.
    ```bash
    git config core.hooksPath .githooks
    ```
+
+## Switching to IEEEtran
+
+`paper-main.tex` starts from the single-column PRIME/arXiv style. For an IEEE
+journal or conference, `template/templateIEEE.tex` is the pristine two-column
+counterpart — a minimal, compiling IEEEtran skeleton (title/`\thanks`,
+`\markboth`, `IEEEkeywords`, `\IEEEPARstart`, IEEE float and bibliography
+conventions). Copy it over `paper-main.tex`, or port the preamble delta:
+
+| PRIME / arXiv | IEEE |
+|---|---|
+| `\documentclass{article}` + `\usepackage{PRIMEarxiv}` | `\documentclass[lettersize,journal]{IEEEtran}` |
+| `\usepackage{hyperref}` | `\usepackage[hypertexnames=false]{hyperref}` — avoids IEEEtran's duplicate float anchors |
+| `\usepackage{subcaption}` | `\usepackage[caption=false,font=footnotesize]{subfig}` — IEEE's recommended package |
+| — | `\usepackage{stfloats}` — lets double-column floats sit at the bottom of a page |
+| `\usepackage{fancyhdr}` | drop it; IEEEtran sets the running heads via `\markboth` |
+| `\keywords{...}` | `\begin{IEEEkeywords}...\end{IEEEkeywords}` |
+| `\author{A \And B}` | one `\author` string with `\IEEEmembership` and `\thanks{}` notes |
+| `\bibliographystyle{unsrt}` | `\bibliographystyle{IEEEtran}` |
+
+Also note that the page is two-column: full-width floats need `figure*`/`table*`,
+and IEEE puts table captions above the table.
+
+The class itself is **not vendored** — `IEEEtran.cls` and `IEEEtran.bst` ship
+with TeX Live/MiKTeX (package `ieeetran`) and with the CI container. Drop a copy
+of the `.cls` at the repo root only if a venue pins a version different from
+your distribution's; `latexmk` prefers the local file.
 
 ## Draft workflow
 
@@ -98,7 +126,9 @@ Currently ships:
 - **research-paper-writing** — section-level structure and reviewer-facing
   presentation.
 - **circuitikz-gen-transistor-schematic** — CircuiTikZ transistor schematics
-  from xschem netlists; only relevant to analog-circuit papers. It self-scopes
+  from xschem netlists, plus `scripts/check_schematic.py`, a stdlib-only linter
+  that checks the generated `.tex` against the `.sch` for missing devices and
+  wrong junction dots. Only relevant to analog-circuit papers; it self-scopes
   via its own description, so it's harmless to leave in for other papers.
 
 To pull the latest skills from upstream:
@@ -153,5 +183,7 @@ following conditions).
 
 1. For a PRIME AI paper, use `templatePRIME.tex` with `PRIMEarxiv.sty` (this
    is what `paper-main.tex` at the repo root starts from).
-2. `template/` keeps a pristine, untouched copy of the template for
+2. For an IEEE paper, use `templateIEEE.tex` (see "Switching to IEEEtran"
+   above); it needs no `.sty` from this repo.
+3. `template/` keeps a pristine, untouched copy of each template for
    reference — it isn't part of the build.

@@ -1,0 +1,132 @@
+% Minimal IEEEtran journal skeleton — the IEEE counterpart to templatePRIME.tex.
+% Reference only; not part of the build. See README.md ("Switching to IEEEtran")
+% for the preamble delta that turns paper-main.tex into an IEEE paper.
+%
+% IEEEtran.cls ships with TeX Live/MiKTeX (package `ieeetran`) and with the CI
+% container, so nothing is vendored here. Only vendor a copy at the repo root if
+% a venue pins a class version different from your distribution's.
+%
+% Class options: journal | conference | technote (+ lettersize | a4paper,
+% draftcls for double-spaced review copy, onecolumn). IEEE Access uses its own
+% option set — check the venue's author kit before submitting.
+% `lettersize` comes from IEEE's current bare_jrnl sample but is not declared by
+% IEEEtran v1.8b, so the log carries a benign "Unused global option [lettersize]".
+\documentclass[lettersize,journal]{IEEEtran}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage[hypertexnames=false]{hyperref} % hyperlinks; hypertexnames=false avoids IEEEtran's duplicate float anchors
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{array}          % >{...} column modifiers
+\usepackage{amsmath,amsfonts}
+\usepackage{microtype}      % microtypography
+\usepackage{graphicx}
+\graphicspath{{media/}}     % organize your images and other figures under media/ folder
+\usepackage[caption=false,font=footnotesize]{subfig} % subfigures — IEEE's recommended package (not subcaption)
+\usepackage{stfloats}       % allow double-column floats at the bottom of a page
+\usepackage{lipsum}         % filler text — delete in a real paper
+
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+\begin{document}
+
+%% Title. \thanks{} footnotes carry funding, manuscript dates, and the
+%% corresponding-author note — IEEE has no separate \and-style author block.
+\title{A Template for IEEE Transactions Style
+\thanks{This work was supported by \dots}
+\thanks{Manuscript received \dots; revised \dots.}}
+
+\author{Author~One,~\IEEEmembership{Student Member,~IEEE,}
+        Author~Two,~\IEEEmembership{Member,~IEEE,}
+        and~Author~Three,~\IEEEmembership{Senior Member,~IEEE}% <-this % stops a space
+\thanks{The authors are with the Department of \dots, University, City, Country
+(e-mail: author@example.edu).}}
+
+% Running heads: left = journal/volume line, right = short author + title.
+\markboth{Journal of \LaTeX\ Class Files,~Vol.~14, No.~8, August~2021}%
+{Author \MakeLowercase{\textit{et al.}}: A Template for IEEE Transactions Style}
+
+\maketitle
+
+\begin{abstract}
+\lipsum[1]
+\end{abstract}
+
+\begin{IEEEkeywords}
+First keyword, second keyword, more.
+\end{IEEEkeywords}
+
+% \IEEEPARstart{}{} sets the drop cap IEEE expects on the first paragraph of
+% the introduction — and only there.
+\section{Introduction}
+\IEEEPARstart{T}{his} is the first paragraph. \lipsum[2]
+
+\section{Method}
+\label{sec:method}
+\lipsum[3] See Section~\ref{sec:method}.
+
+\subsection{Second-level heading}
+\lipsum[4]
+\begin{equation}
+  y = \sum_{i=1}^{N} a_i x_i + b.
+  \label{eq:example}
+\end{equation}
+
+\section{Results}
+\lipsum[5] See Fig.~\ref{fig:fig1} and Table~\ref{tab:table}. IEEE cites by
+bracketed number~\cite{shell2015ieeetran}, so \verb+\citet+-style inline forms
+(available in the PRIME/arXiv template via natbib) do not apply here.
+
+% Single-column float. Use figure* / table* to span both columns; with
+% stfloats loaded, [!b] also works for double-column floats.
+\begin{figure}[!t]
+  \centering
+  \fbox{\rule[-.5cm]{4cm}{3cm}}
+  \caption{Sample figure caption.}
+  \label{fig:fig1}
+\end{figure}
+
+% IEEE puts the table caption above the table and small-caps the title.
+\begin{table}[!t]
+  \caption{Sample Table Title}
+  \label{tab:table}
+  \centering
+  \begin{tabular}{lll}
+    \toprule
+    Name     & Description     & Size ($\mu$m) \\
+    \midrule
+    Dendrite & Input terminal  & $\sim$100     \\
+    Axon     & Output terminal & $\sim$10      \\
+    Soma     & Cell body       & up to $10^6$  \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Conclusion}
+Your conclusion here.
+
+\section*{Acknowledgments}
+This work was supported in part by \dots
+
+% References, two ways.
+% (a) BibTeX — what paper-main.tex uses. IEEEtran.bst ships with the class:
+%     \bibliographystyle{IEEEtran}
+%     \bibliography{references}
+%     Switch to these two lines once references.bib holds at least one cited
+%     entry; against an empty .bib, IEEEtran's thebibliography errors out
+%     ("perhaps a missing \item"), which is why this reference file uses (b).
+% (b) A hand-written list, as IEEE's own bare_jrnl sample does:
+\begin{thebibliography}{1}
+\bibitem{shell2015ieeetran}
+M.~Shell, ``How to use the IEEEtran \LaTeX\ class,'' IEEEtran class
+documentation, v1.8b, Aug.\ 2015. [Online]. Available:
+\url{https://ctan.org/pkg/ieeetran}
+\end{thebibliography}
+
+% Optional author biographies (IEEE journals only; drop for conference papers).
+% \begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{photo}}]{Author One}
+% Biography text here.
+% \end{IEEEbiography}
+
+\end{document}

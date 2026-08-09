@@ -5,8 +5,8 @@ Guidance for Claude Code working in this repo: the LaTeX write-up of
 For the compile/draft workflow and the template origin, see
 [README.md](README.md).
 
-**Paper:** <title> — <authors> (<institution>). PRIME AI / arxiv style. The
-live document is [paper-main.tex](paper-main.tex).
+**Paper:** <title> — <authors> (<institution>). <PRIME AI / arxiv | IEEEtran>
+style. The live document is [paper-main.tex](paper-main.tex).
 
 > This file is a starting point copied from a template repo. Fill in the
 > bracketed placeholders above (and anywhere else in this file) for the
@@ -83,11 +83,11 @@ manager's own key (e.g. `authorTitleWordYear`).
 | Path | What it is |
 |---|---|
 | `paper-main.tex` | the paper — the only source file you normally edit |
-| `PRIMEarxiv.sty` | active style package (arxiv style by George Kour, adapted for PRIME); identical to `template/PRIMEarxiv.sty` |
+| `PRIMEarxiv.sty` | active style package (arxiv style by George Kour, adapted for PRIME); identical to `template/PRIMEarxiv.sty`. Not used if the paper runs on IEEEtran |
 | `references.bib` | bibliography (fill as you cite; entries must be genuine) |
 | `media/` | built figure PDFs, where `\graphicspath` resolves (create as needed) |
 | `media/src/` | figure sources — standalone TikZ, plot scripts (create as needed) |
-| `template/` | the pristine arxiv/PRIME template (`templatePRIME.tex` + `.sty`) — reference only, not part of the build |
+| `template/` | pristine templates — `templatePRIME.tex` + `PRIMEarxiv.sty` (arxiv/PRIME) and `templateIEEE.tex` (IEEEtran skeleton). Reference only, not part of the build; `IEEEtran.cls` is not vendored (it comes from TeX Live) |
 | `scripts/` | `gen-draft.sh` (compile + archive a snapshot), `clean-build.sh` (purge build artifacts) |
 | `.vscode/settings.json` | LaTeX Workshop config: builds to `build/`, ChkTeX lint, `.bib` format-on-save |
 | `academic-writing-skill/` | git submodule pinning [NooriDan/academic-writing-skill](https://github.com/NooriDan/academic-writing-skill) — the actual skill sources live here |
@@ -144,9 +144,13 @@ by committing the new submodule SHA).
 - **research-paper-writing** — section-level structure and reviewer-facing
   presentation (Abstract/Intro/Related Work/Method/Experiments/Conclusion).
 - **circuitikz-gen-transistor-schematic** — generates/fixes CircuiTikZ
-  transistor-level schematics from xschem netlists. **Only relevant to
-  analog-circuit papers** — harmless to leave for other papers since it
-  self-scopes off its own description; it just won't fire.
+  transistor-level schematics from xschem netlists, and ships
+  `scripts/check_schematic.py`, a stdlib-only linter that checks a generated
+  `.tex` against its `.sch` (every device drawn, none invented) and audits
+  junction dots (3-way T's need a dot, crossovers don't, never more than 3
+  routes at one node). Run it to 0 errors after any wiring or re-spacing edit.
+  **Only relevant to analog-circuit papers** — harmless to leave for other
+  papers since it self-scopes off its own description; it just won't fire.
 
 ## Git
 
@@ -163,6 +167,10 @@ When starting a new paper from this template, at minimum:
 
 1. Fill in the placeholders at the top of this file (repo name, title,
    authors, institution) and in `paper-main.tex` (`\title`, `\author`).
+   Pick the document class up front: `paper-main.tex` ships PRIME/arXiv; for
+   an IEEE venue start from `template/templateIEEE.tex` instead (README,
+   "Switching to IEEEtran"), and say which one this paper uses at the top of
+   this file.
 2. Once per clone: `git submodule update --init` to populate
    `academic-writing-skill/` (and make `.claude/skills/` resolve).
 3. Update `LICENSE` (copyright holder/year) and `README.md` (project name,
